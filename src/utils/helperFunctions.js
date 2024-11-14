@@ -36,4 +36,12 @@ const formatBitacoraResponse = (bitacora) => {
   };
 };
 
-export { findRoleByName, formatUserResponse, updatePassword, formatBitacoraResponse };
+const formatRoleResponse = (role) => {
+  return {
+    id: role._id,
+    name: role.name,
+    status: role.status,
+  };
+};
+
+export { findRoleByName, formatUserResponse, updatePassword, formatBitacoraResponse, formatRoleResponse };
