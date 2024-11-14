@@ -1,4 +1,4 @@
-import Bitacora from "../models/Bitacoramodel.js";
+import Bitacora from "../models/bitacoramodel.js";
 import { findRoleByName, formatBitacoraResponse } from "../utils/helperFunctions.js";
 
 // Gestor de errores centralizado para agilizar las respuestas a errores repetitivos
