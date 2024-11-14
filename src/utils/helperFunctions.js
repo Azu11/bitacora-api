@@ -20,4 +20,20 @@ const updatePassword = async (newPassword, currentPassword) => {
     : Promise.reject(new Error("La contraseña actual no es correcta"));
 };
 
-export { findRoleByName, formatUserResponse, updatePassword };
+const formatBitacoraResponse = (bitacora) => {
+  return {
+    id: bitacora._id,
+    title: bitacora.title,
+    description: bitacora.description,
+    location: bitacora.location,
+    conditions: bitacora.conditions,
+    details: bitacora.details,
+    observations: bitacora.observations,
+    createdBy: bitacora.createdBy.username,
+    createdAt: bitacora.createdAt,
+    updatedAt: bitacora.updatedAt,
+    roles: bitacora.roles.map((role) => role.name),
+  };
+};
+
+export { findRoleByName, formatUserResponse, updatePassword, formatBitacoraResponse };
