@@ -2,13 +2,13 @@ import express from 'express';
 import morgan from 'morgan';  
 import cors from 'cors'; 
 import routes from './routes/index.js';
-// import { connectDB } from './database/conexion.js';
+import { connectDB } from './database/conexion.js';
 
 const port = process.env.PORT || 3000;
 const app = express();
 
 // Conectar a la base de datos antes de iniciar el servidor
-// connectDB();
+connectDB();
 
 // Middlewares
 app.use(morgan('dev')); 
@@ -24,7 +24,7 @@ app.get('/ping', (req, res) => {
   res.json({ message: 'pong' });
 });
 
-// app.use('/api', routes);
+app.use('/api', routes);
 
 // Servidor escuchando
 app.listen(port, () => {
