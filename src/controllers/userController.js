@@ -4,10 +4,10 @@ import User from "../models/Usermodel.js";
 import Role from "../models/Rolemodel.js";
 import { findRoleByName, formatUserResponse, updatePassword } from "../utils/helperFunctions.js";
 
-// Centralized error handler to streamline repetitive error responses
+// Gestor de errores centralizado para agilizar las respuestas a errores repetitivos
 const handleErrors = (res, error, status = 400) => res.status(status).json({ message: error.message });
 
-// Centralized role retrieval logic
+// Lógica centralizada de recuperación de roles
 const getRoles = async (roleNames) => {
   return roleNames && roleNames.length > 0
     ? await Role.find({ name: { $in: roleNames } })
