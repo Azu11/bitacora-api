@@ -22,33 +22,27 @@ export const createRole = async (req, res) => {
 
   try {
     // Verificar si el rol ya existe
-    const existingRole = await Role.findOne({ name });
+    const existingRole = await Role.findOne({ name: name.toLowerCase().trim() });
     if (existingRole) {
       return res.status(400).json({ message: "El rol ya existe" });
     }
 
     // Crear y guardar el nuevo rol
     const newRole = new Role({
-      name,
-      status: status || "activo", // Estado predeterminado
+      name: name.toLowerCase().trim(),
+      status: status || "activo",
     });
 
     const savedRole = await newRole.save();
 
-    // Respuesta exitosa con el rol creado
-    res.status(201).json({ 
-      message: "Rol creado exitosamente", 
-      role: savedRole 
+    res.status(201).json({
+      message: "Rol creado exitosamente",
+      role: formatRoleResponse(savedRole), // Formatear la respuesta si es necesario
     });
   } catch (error) {
-    if (error.name === "ValidationError") {
-      const validationErrors = Object.values(error.errors).map((err) => err.message);
-      return res.status(400).json({ message: validationErrors.join(", ") });
-    }
-    res.status(500).json({ message: "Error al crear el rol", error: error.message });
+    handleErrors(res, error);
   }
 };
-
 
 // Obtener todos los roles
 export const getRolesList = async (req, res) => {
@@ -63,13 +57,14 @@ export const getRolesList = async (req, res) => {
 // Obtener un rol por ID
 export const getRoleById = async (req, res) => {
   try {
-    const role = await Role.findById(req.params.id).populate("users", "username");
+    const role = await Role.findById(req.params.id);
     if (!role) return res.status(404).json({ message: "Rol no encontrado" });
     res.status(200).json(formatRoleResponse(role));
   } catch (error) {
     handleErrors(res, error, 500);
   }
 };
+
 
 // Actualizar un rol con múltiples usuarios
 export const updateRole = async (req, res) => {
