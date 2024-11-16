@@ -11,6 +11,45 @@ const getRoles = async (roleNames) => {
     : [await findRoleByName("colaborador")];
 };
 
+// Crear un nuevo rol
+export const createRole = async (req, res) => {
+  const { name, status } = req.body;
+
+  // Validación de entrada
+  if (!name) {
+    return res.status(400).json({ message: "El campo 'name' es obligatorio" });
+  }
+
+  try {
+    // Verificar si el rol ya existe
+    const existingRole = await Role.findOne({ name });
+    if (existingRole) {
+      return res.status(400).json({ message: "El rol ya existe" });
+    }
+
+    // Crear y guardar el nuevo rol
+    const newRole = new Role({
+      name,
+      status: status || "activo", // Estado predeterminado
+    });
+
+    const savedRole = await newRole.save();
+
+    // Respuesta exitosa con el rol creado
+    res.status(201).json({ 
+      message: "Rol creado exitosamente", 
+      role: savedRole 
+    });
+  } catch (error) {
+    if (error.name === "ValidationError") {
+      const validationErrors = Object.values(error.errors).map((err) => err.message);
+      return res.status(400).json({ message: validationErrors.join(", ") });
+    }
+    res.status(500).json({ message: "Error al crear el rol", error: error.message });
+  }
+};
+
+
 // Obtener todos los roles
 export const getRolesList = async (req, res) => {
   try {
