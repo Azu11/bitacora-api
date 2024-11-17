@@ -37,7 +37,7 @@ export const createRole = async (req, res) => {
 
     res.status(201).json({
       message: "Rol creado exitosamente",
-      role: formatRoleResponse(savedRole), // Formatear la respuesta si es necesario
+      role: formatRoleResponse(savedRole),
     });
   } catch (error) {
     handleErrors(res, error);
